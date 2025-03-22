@@ -30,11 +30,10 @@ export default function ProductForm() {
     e.preventDefault();
     
     try {
-      // Convert string values to appropriate types
       const productData: Omit<Product, "id"> = {
         name: formData.name,
         category: formData.category as CategoryEnum,
-        price: parseFloat(formData.price) * 100, // Convert to cents
+        price: parseFloat(formData.price) * 100,
         description: formData.description,
         imageUrl: formData.imageUrl || DEFAULT_PRODUCT_IMAGE,
         quantityInStock: parseInt(formData.quantityInStock)
@@ -44,7 +43,7 @@ export default function ProductForm() {
       
       if (newProduct) {
         toast.success('Produto adicionado com sucesso!');
-        router.push('/'); // Redirect to product list
+        router.push('/');
       }
     } catch (error) {
       toast.error('Erro ao adicionar produto');

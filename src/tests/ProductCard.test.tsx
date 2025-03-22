@@ -1,17 +1,15 @@
 import ProductCard from '@/components/ProductCard';
 import { useCartStore } from '@/lib/store';
-import { Product } from '@/types';
+import { CategoryEnum, Product } from '@/types';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-// Mock the toast notifications
 vi.mock('react-hot-toast', () => ({
   toast: {
     success: vi.fn(),
   },
 }));
 
-// Mock zustand store
 vi.mock('@/lib/store', () => ({
   useCartStore: vi.fn(),
 }));
@@ -20,7 +18,7 @@ describe('ProductCard Component', () => {
   const mockProduct: Product = {
     id: '1',
     name: 'Test Product',
-    category: 'test',
+    category: CategoryEnum.FOOD,
     price: 1000,
     description: 'Test description',
     imageUrl: 'https://example.com/test.jpg',
@@ -30,10 +28,8 @@ describe('ProductCard Component', () => {
   const mockAddToCart = vi.fn();
 
   beforeEach(() => {
-    // Reset mocks
     vi.clearAllMocks();
     
-    // Setup mock implementation for useCartStore
     (useCartStore as unknown as ReturnType<typeof vi.fn>).mockImplementation(() => mockAddToCart);
   });
 
@@ -41,7 +37,7 @@ describe('ProductCard Component', () => {
     render(<ProductCard product={mockProduct} />);
     
     expect(screen.getByText('Test Product')).toBeInTheDocument();
-    expect(screen.getByText('test')).toBeInTheDocument();
+    expect(screen.getByText('food')).toBeInTheDocument();
     expect(screen.getByText('Test description')).toBeInTheDocument();
     expect(screen.getByText('R$ 10,00')).toBeInTheDocument();
     expect(screen.getByText('5 em estoque')).toBeInTheDocument();
@@ -64,4 +60,4 @@ describe('ProductCard Component', () => {
     expect(button).toBeDisabled();
     expect(screen.getByText('Fora de estoque')).toBeInTheDocument();
   });
-}); 
+});

@@ -1,15 +1,12 @@
 module.exports = (req, res, next) => {
-  // POST /orders endpoint needs special handling for stock validation
   if (req.method === 'POST' && req.path === '/orders') {
     const db = req.app.db;
     const { items } = req.body;
 
-    // Check if we have items
     if (!items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ message: 'Orders must have at least one item' });
     }
 
-    // Check stock for each product
     for (const item of items) {
       const product = db.get('products').find({ id: item.productId }).value();
       
@@ -22,7 +19,6 @@ module.exports = (req, res, next) => {
       }
     }
     
-    // Update stock for each product
     for (const item of items) {
       const product = db.get('products').find({ id: item.productId }).value();
       db.get('products')
@@ -31,17 +27,14 @@ module.exports = (req, res, next) => {
         .write();
     }
     
-    // Calculate total
     const total = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     
-    // Add custom fields to the order
     req.body.total = total;
     req.body.status = 'pending';
     req.body.createdAt = new Date().toISOString();
     req.body.updatedAt = new Date().toISOString();
   }
 
-  // Handle PATCH /orders/:id/status separately
   if (req.method === 'PATCH' && /^\/orders\/\w+\/status$/.test(req.path)) {
     const orderIdMatch = req.path.match(/^\/orders\/(\w+)\/status$/);
     if (orderIdMatch) {
@@ -59,7 +52,6 @@ module.exports = (req, res, next) => {
         return res.status(400).json({ message: 'Invalid status value' });
       }
       
-      // Update the order status
       const updatedOrder = { 
         ...order,
         status,
@@ -75,6 +67,5 @@ module.exports = (req, res, next) => {
     }
   }
 
-  // Continue normal processing for other routes
   next();
-}; 
+};

@@ -10,45 +10,38 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       onPageChange(page);
-      // Scroll to top when changing pages
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
-  // Create an array of page numbers to display
   const getPageNumbers = () => {
     const pageNumbers = [];
-    const maxVisiblePages = 5; // Maximum number of page buttons to show
+    const maxVisiblePages = 5;
 
     if (totalPages <= maxVisiblePages) {
-      // Show all pages if we have fewer than maxVisiblePages
       for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
       }
     } else {
-      // Show a subset of pages with ellipsis for large page counts
       if (currentPage <= 3) {
-        // Current page is near the beginning
         for (let i = 1; i <= 4; i++) {
           pageNumbers.push(i);
         }
-        pageNumbers.push(-1); // Represents ellipsis
+        pageNumbers.push(-1);
         pageNumbers.push(totalPages);
       } else if (currentPage >= totalPages - 2) {
-        // Current page is near the end
         pageNumbers.push(1);
-        pageNumbers.push(-1); // Represents ellipsis
+        pageNumbers.push(-1);
         for (let i = totalPages - 3; i <= totalPages; i++) {
           pageNumbers.push(i);
         }
       } else {
-        // Current page is in the middle
         pageNumbers.push(1);
-        pageNumbers.push(-1); // Represents ellipsis
+        pageNumbers.push(-1);
         for (let i = currentPage - 1; i <= currentPage + 1; i++) {
           pageNumbers.push(i);
         }
-        pageNumbers.push(-1); // Represents ellipsis
+        pageNumbers.push(-1);
         pageNumbers.push(totalPages);
       }
     }
@@ -77,7 +70,6 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
 
         {getPageNumbers().map((pageNum, index) => (
           pageNum === -1 ? (
-            // Render ellipsis
             <span
               key={`ellipsis-${index}`}
               className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700"
@@ -85,7 +77,6 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
               ...
             </span>
           ) : (
-            // Render page number
             <button
               key={pageNum}
               onClick={() => handlePageChange(pageNum)}

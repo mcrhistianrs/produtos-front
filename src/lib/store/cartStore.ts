@@ -27,93 +27,88 @@ export const useCartStore = create<CartState>()(
       isLoading: false,
       error: null,
       
-      addToCart: (product: Product, quantity: number) => {
-        const { items } = get()
-        const existingItem = items.find(item => item.productId === product.id)
-        
-        if (existingItem) {
-          // Update quantity if item already exists
-          set({
-            items: items.map(item => 
-              item.productId === product.id 
-                ? { ...item, quantity: item.quantity + quantity } 
-                : item
-            )
-          })
-        } else {
-          // Add new item
-          set({
-            items: [...items, {
-              productId: product.id,
-              name: product.name,
-              imageUrl: product.imageUrl,
-              quantity,
-              price: product.price
-            }]
-          })
-        }
+      addToCart: (product, quantity) => {
+        set((state) => {
+          const existingItemIndex = state.items.findIndex(
+            (item) => item.productId === product.id
+          );
+          
+          if (existingItemIndex !== -1) {
+            const updatedItems = [...state.items];
+            updatedItems[existingItemIndex].quantity += quantity;
+            return { items: updatedItems };
+          }
+          
+          return {
+            items: [
+              ...state.items,
+              {
+                productId: product.id,
+                quantity,
+                price: product.price,
+                name: product.name,
+                imageUrl: product.imageUrl
+              },
+            ],
+          };
+        });
       },
       
-      removeFromCart: (productId: string) => {
-        const { items } = get()
-        set({
-          items: items.filter(item => item.productId !== productId)
-        })
+      removeFromCart: (productId) => {
+        set((state) => ({
+          items: state.items.filter((item) => item.productId !== productId),
+        }));
       },
       
-      updateQuantity: (productId: string, quantity: number) => {
-        const { items } = get()
-        if (quantity <= 0) {
-          set({
-            items: items.filter(item => item.productId !== productId)
-          })
-        } else {
-          set({
-            items: items.map(item => 
-              item.productId === productId 
-                ? { ...item, quantity } 
-                : item
-            )
-          })
-        }
+      updateQuantity: (productId, quantity) => {
+        set((state) => {
+          if (quantity <= 0) {
+            return {
+              items: state.items.filter((item) => item.productId !== productId),
+            };
+          }
+
+          const updatedItems = state.items.map((item) =>
+            item.productId === productId ? { ...item, quantity } : item
+          );
+
+          return { items: updatedItems };
+        });
       },
       
-      clearCart: () => {
-        set({ items: [] })
-      },
+      clearCart: () => set({ items: [] }),
       
       getTotal: () => {
-        const { items } = get()
-        return items.reduce((total, item) => total + (item.price * item.quantity), 0)
+        return get().items.reduce(
+          (total, item) => total + item.price * item.quantity,
+          0
+        );
       },
       
       checkout: async () => {
-        const { items, clearCart } = get()
-        
+        const items = get().items;
+
         if (items.length === 0) {
-          set({ error: 'Your cart is empty' })
-          return
+          set({ error: "Seu carrinho está vazio" });
+          return;
         }
-        
-        set({ isLoading: true, error: null })
+
+        set({ isLoading: true, error: null });
         try {
-          // Format items for the API
-          const orderItems = items.map(({ productId, quantity, price }) => ({
-            productId,
-            quantity,
-            price
-          }))
-          
-          await orderService.create({ items: orderItems })
-          
-          // Clear cart after successful checkout
-          clearCart()
-          set({ isLoading: false })
+          const orderItems = items.map(item => ({
+            productId: item.productId,
+            quantity: item.quantity,
+            price: item.price
+          }));
+
+          await orderService.create({ items: orderItems });
+          get().clearCart();
+          set({ isLoading: false });
         } catch (error) {
           set({ 
-            error: error instanceof Error ? error.message : 'Checkout failed',
+            error: error instanceof Error ? error.message : "Falha ao finalizar pedido", 
             isLoading: false 
-          })
+          });
         }
       }
     }),

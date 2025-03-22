@@ -28,7 +28,6 @@ export default function ProductSearch({ onSearch, onPriceRangeChange }: ProductS
     const value = e.target.value;
     setMinPriceInput(value);
     
-    // Convert to number and update only if it's a valid number
     const numValue = value === '' ? 0 : parseFloat(value);
     if (!isNaN(numValue)) {
       const newRange = { ...priceRange, min: numValue };
@@ -41,7 +40,6 @@ export default function ProductSearch({ onSearch, onPriceRangeChange }: ProductS
     const value = e.target.value;
     setMaxPriceInput(value);
     
-    // Convert to number and update only if it's a valid number
     const numValue = value === '' ? 10000 : parseFloat(value);
     if (!isNaN(numValue)) {
       const newRange = { ...priceRange, max: numValue };

@@ -24,7 +24,6 @@ export default function Home() {
     fetchProducts();
   }, [fetchProducts]);
 
-  // Reset to first page when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedCategory, searchQuery, priceRange]);
@@ -34,7 +33,6 @@ export default function Home() {
     .filter(product => product.name.toLowerCase().includes(searchQuery.toLowerCase()))
     .filter(product => product.price >= priceRange.min * 100 && product.price <= priceRange.max * 100);
 
-  // Calculate pagination
   const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
   const paginatedProducts = filteredProducts.slice(
     (currentPage - 1) * PRODUCTS_PER_PAGE,
@@ -99,7 +97,6 @@ export default function Home() {
             )}
           </div>
 
-          {/* Pagination */}
           {totalPages > 1 && (
             <Pagination 
               currentPage={currentPage}
