@@ -179,6 +179,24 @@
       "description": "Lasanha de carne com molho bechamel e queijo gratinado",
       "imageUrl": "https://images.pexels.com/photos/6287525/pexels-photo-6287525.jpeg?auto=compress&cs=tinysrgb&w=600&h=400",
       "quantityInStock": 5
+    },
+    {
+      "name": "sanduíche",
+      "category": "food",
+      "price": 500,
+      "description": "sanduíche",
+      "imageUrl": "https://media.istockphoto.com/id/977144966/pt/foto/sandwich-with-paio-sausage-and-ham.jpg?s=612x612&w=is&k=20&c=QLKFY1DM9la-HftvIvtDqYXvWIGcsHASCVtBJnx6xCk=",
+      "quantityInStock": 10,
+      "id": "-N-W_Xc"
+    },
+    {
+      "name": "sanduíche",
+      "category": "food",
+      "price": 700,
+      "description": "de atum",
+      "imageUrl": "https://media.istockphoto.com/id/977144966/pt/foto/sandwich-with-paio-sausage-and-ham.jpg?s=612x612&w=is&k=20&c=QLKFY1DM9la-HftvIvtDqYXvWIGcsHASCVtBJnx6xCk=",
+      "quantityInStock": 10,
+      "id": "9KdLAAr"
     }
   ],
   "orders": [
