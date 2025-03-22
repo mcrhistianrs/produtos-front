@@ -2,13 +2,12 @@
 
 import { CartItem, Loading } from '@/components';
 import { useCartStore } from '@/lib/store';
-import { formatCurrency } from '@/lib/utils';
 import { ArrowLeftIcon, ShoppingBagIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
 
 export default function CartPage() {
-  const { items, isLoading, error, getTotal, checkout } = useCartStore();
+  const { items, isLoading, error,  checkout } = useCartStore();
 
   const handleCheckout = async () => {
     try {
@@ -72,14 +71,8 @@ export default function CartPage() {
             </div>
           )}
 
-          <div className="mt-6 border-t border-gray-200 pt-6">
-            <div className="flex justify-between text-base font-medium text-gray-900">
-              <p>Subtotal</p>
-              <p>{formatCurrency(getTotal())}</p>
-            </div>
-            <p className="mt-0.5 text-sm text-gray-500">
-              Frete e impostos calculados no checkout.
-            </p>
+          <div >
+            
             <div className="mt-6">
               <button
                 onClick={handleCheckout}

@@ -25,7 +25,7 @@
       "price": 599,
       "description": "Bebida gelada e refrescante sabor cola",
       "imageUrl": "https://images.pexels.com/photos/2983100/pexels-photo-2983100.jpeg?auto=compress&cs=tinysrgb&w=600&h=400",
-      "quantityInStock": 20
+      "quantityInStock": 18
     },
     {
       "id": "4",
@@ -195,6 +195,34 @@
       "createdAt": "2025-03-22T21:21:33.908Z",
       "updatedAt": "2025-03-22T21:21:33.908Z",
       "id": 1
+    },
+    {
+      "items": [
+        {
+          "productId": "3",
+          "quantity": 1,
+          "price": 599
+        }
+      ],
+      "total": 599,
+      "status": "pending",
+      "createdAt": "2025-03-22T21:27:50.598Z",
+      "updatedAt": "2025-03-22T21:27:50.598Z",
+      "id": 2
+    },
+    {
+      "items": [
+        {
+          "productId": "3",
+          "quantity": 1,
+          "price": 599
+        }
+      ],
+      "total": 599,
+      "status": "pending",
+      "createdAt": "2025-03-22T21:28:04.648Z",
+      "updatedAt": "2025-03-22T21:28:04.648Z",
+      "id": 3
     }
   ]
 }
