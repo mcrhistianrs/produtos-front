@@ -1,21 +1,29 @@
 "use client";
 
-import { Loading, ProductCard } from '@/components';
+import { Loading, ProductCard, ProductSearch } from '@/components';
 import { useProductStore } from '@/lib/store';
 import { CategoryEnum } from '@/types';
 import { useEffect, useState } from 'react';
 
+interface PriceRange {
+  min: number;
+  max: number;
+}
+
 export default function Home() {
   const { products, isLoading, error, fetchProducts } = useProductStore();
   const [selectedCategory, setSelectedCategory] = useState<CategoryEnum | 'all'>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [priceRange, setPriceRange] = useState<PriceRange>({ min: 0, max: 10000 });
 
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
 
-  const filteredProducts = selectedCategory === 'all'
-    ? products
-    : products.filter(product => product.category === selectedCategory);
+  const filteredProducts = products
+    .filter(product => selectedCategory === 'all' || product.category === selectedCategory)
+    .filter(product => product.name.toLowerCase().includes(searchQuery.toLowerCase()))
+    .filter(product => product.price >= priceRange.min * 100 && product.price <= priceRange.max * 100);
 
   return (
     <div className="space-y-6">
@@ -35,6 +43,11 @@ export default function Home() {
           </select>
         </div>
       </div>
+
+      <ProductSearch 
+        onSearch={(query) => setSearchQuery(query)}
+        onPriceRangeChange={(range) => setPriceRange(range)}
+      />
 
       {isLoading ? (
         <Loading />
@@ -56,7 +69,7 @@ export default function Home() {
             ))
           ) : (
             <div className="col-span-full text-center text-gray-500 p-8">
-              <p>Nenhum produto encontrado para esta categoria.</p>
+              <p>Nenhum produto encontrado para os filtros selecionados.</p>
             </div>
           )}
         </div>
