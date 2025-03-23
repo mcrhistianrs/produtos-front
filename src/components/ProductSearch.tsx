@@ -24,11 +24,17 @@ export default function ProductSearch({ onSearch, onPriceRangeChange }: ProductS
     onSearch(value);
   };
 
+  const convertToNumber = (value: string): number => {
+    if (value === '') return 0;
+    const normalizedValue = value.replace(',', '.');
+    return parseFloat(normalizedValue);
+  };
+
   const handleMinPriceChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setMinPriceInput(value);
     
-    const numValue = value === '' ? 0 : parseFloat(value);
+    const numValue = convertToNumber(value);
     if (!isNaN(numValue)) {
       const newRange = { ...priceRange, min: numValue };
       setPriceRange(newRange);
@@ -40,7 +46,7 @@ export default function ProductSearch({ onSearch, onPriceRangeChange }: ProductS
     const value = e.target.value;
     setMaxPriceInput(value);
     
-    const numValue = value === '' ? 10000 : parseFloat(value);
+    const numValue = value === '' ? 10000 : convertToNumber(value);
     if (!isNaN(numValue)) {
       const newRange = { ...priceRange, max: numValue };
       setPriceRange(newRange);

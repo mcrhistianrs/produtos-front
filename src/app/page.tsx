@@ -31,7 +31,12 @@ export default function Home() {
   const filteredProducts = products
     .filter(product => selectedCategory === 'all' || product.category === selectedCategory)
     .filter(product => product.name.toLowerCase().includes(searchQuery.toLowerCase()))
-    .filter(product => product.price >= priceRange.min * 100 && product.price <= priceRange.max * 100);
+    .filter(product => {
+      // Convert price range values to cents for comparison with product prices
+      const minPriceInCents = Math.floor(priceRange.min * 100);
+      const maxPriceInCents = Math.ceil(priceRange.max * 100);
+      return product.price >= minPriceInCents && product.price <= maxPriceInCents;
+    });
 
   const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
   const paginatedProducts = filteredProducts.slice(
@@ -45,7 +50,7 @@ export default function Home() {
         <h1 className="text-2xl font-bold text-gray-900">Produtos</h1>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
-            <span className="text-sm text-gray-600">Filtrar por:</span>
+            <span className="text-sm text-gray-600">Ordenar por:</span>
             <select 
               className="border rounded-md px-3 py-1 text-sm bg-white"
               value={selectedCategory}
