@@ -2,6 +2,11 @@ Technologies used:
 * Nextjs
 * tailwindcss
 * json server
+* zustand
+    * simplicity
+    * typescript support
+    * no context providers needed
+    * performance
 
 ## Getting Started
 
